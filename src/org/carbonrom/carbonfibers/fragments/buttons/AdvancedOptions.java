@@ -75,6 +75,7 @@ public class AdvancedOptions extends SettingsPreferenceFragment implements
 
     private static final String KEY_NAVIGATION_BAR         = "navigation_bar";
     private static final String KEY_BUTTON_BRIGHTNESS      = "button_brightness";
+    private static final String KEY_ANBI                   = "anbi";
 
     private static final String KEY_HOME_LONG_PRESS        = "hardware_keys_home_long_press";
     private static final String KEY_HOME_DOUBLE_TAP        = "hardware_keys_home_double_tap";
@@ -120,6 +121,7 @@ public class AdvancedOptions extends SettingsPreferenceFragment implements
 
     private SwitchPreference mNavigationBar;
     private SwitchPreference mButtonBrightness;
+    private SwitchPreference mAnbiPreference;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -135,11 +137,23 @@ public class AdvancedOptions extends SettingsPreferenceFragment implements
 
         initHardwareKeys(res);
 
+        /* Accidental navigation button interaction */
+        mAnbiPreference = (SwitchPreference) findPreference(KEY_ANBI);
+        if (mAnbiPreference != null) {
+            if (mDeviceHardwareKeys != 0) {
+                mAnbiPreference.setOnPreferenceChangeListener(this);
+            } else {
+                prefScreen.removePreference(mAnbiPreference);
+            }
+        }
+
+
         /* Navigation Bar */
         mNavigationBar = (SwitchPreference) findPreference(KEY_NAVIGATION_BAR);
         if (mNavigationBar != null) {
             mNavigationBar.setOnPreferenceChangeListener(this);
         }
+
         /* Button Brightness */
         mButtonBrightness = (SwitchPreference) findPreference(KEY_BUTTON_BRIGHTNESS);
         if (mButtonBrightness != null) {
@@ -151,6 +165,18 @@ public class AdvancedOptions extends SettingsPreferenceFragment implements
                 prefScreen.removePreference(mButtonBrightness);
             }
         }
+
+
+        /* Accidental navigation button interaction */
+        mAnbiPreference = (SwitchPreference) findPreference(KEY_ANBI);
+        if (mAnbiPreference != null) {
+            if (mDeviceHardwareKeys != 0) {
+                mAnbiPreference.setOnPreferenceChangeListener(this);
+            } else {
+                prefScreen.removePreference(mAnbiPreference);
+            }
+        }
+
 
         /* Home Key Long Press */
         int defaultLongPressOnHardwareHomeBehavior = res.getInteger(
@@ -333,6 +359,8 @@ public class AdvancedOptions extends SettingsPreferenceFragment implements
             return Settings.System.NAVIGATION_BAR_ENABLED;
         } else if (preference == mButtonBrightness) {
             return Settings.System.BUTTON_BRIGHTNESS_ENABLED;
+        } else if (preference == mAnbiPreference) {
+            return Settings.System.ANBI_ENABLED;       
         } else if (preference == mHomeLongPressAction) {
             return Settings.System.KEY_HOME_LONG_PRESS_ACTION;
         } else if (preference == mHomeDoubleTapAction) {
@@ -391,11 +419,17 @@ public class AdvancedOptions extends SettingsPreferenceFragment implements
         final boolean buttonBrightnessEnabled = Settings.System.getIntForUser(resolver,
                 Settings.System.BUTTON_BRIGHTNESS_ENABLED, 1, UserHandle.USER_CURRENT) != 0;
 
+        final boolean anbiEnabled = Settings.System.getIntForUser(resolver,
+                Settings.System.ANBI_ENABLED, 0, UserHandle.USER_CURRENT) != 0;
+
         if (mNavigationBar != null) {
             mNavigationBar.setChecked(navigationBarEnabled);
         }
         if (mButtonBrightness != null) {
             mButtonBrightness.setChecked(buttonBrightnessEnabled);
+        }
+        if (mAnbiPreference != null) {
+            mAnbiPreference.setChecked(anbiEnabled);
         }
 
         final PreferenceScreen prefScreen = getPreferenceScreen();

@@ -20,6 +20,11 @@
     android:title="@string/buttons_category"
     xmlns:settings="http://schemas.android.com/apk/res/com.android.settings">
 
+     <com.android.settings.carbon.SystemSettingSwitchPreference
+        android:key="anbi"
+        android:title="@string/anbi_title"
+        android:summary="@string/anbi_summary"/>
+
      <PreferenceCategory
         android:key="nav_keys"
         android:title="@string/nav_keys_title" >
