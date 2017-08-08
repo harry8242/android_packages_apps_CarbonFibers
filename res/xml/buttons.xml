@@ -26,6 +26,17 @@
         android:summary="@string/advanced_options_summary"
         android:fragment="org.carbonrom.carbonfibers.fragments.buttons.AdvancedOptions" />
 
+    <PreferenceCategory
+ 	android:title="@string/buttons_piesettings_category">
+
+        <PreferenceScreen
+	    android:key="pie_settings"
+            android:title="@string/pie_settings"
+            android:summary="@string/pie_settings_summary" 
+            android:fragment="org.carbonrom.carbonfibers.fragments.buttons.PieSettings" />
+	</PreferenceScreen>
+
+    </PreferenceCategory>
 
     <PreferenceCategory
         android:title="@string/buttons_software_category">
